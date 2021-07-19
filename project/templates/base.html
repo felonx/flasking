@@ -5,6 +5,15 @@
     <title>{% block title %}{% endblock %}</title>
     <link rel="stylesheet" href="{{url_for('static', filename='styles.css')}}">
     {% block head %}{% endblock %}
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <ul class=flashes>
+            {% for message in messages %}
+                <li>{{ message }}</li>
+            {% endfor %}
+            </ul>
+        {% endif %}
+{% endwith %}
 </head>
 <body>
     {% block body %}{% endblock %}
@@ -18,5 +27,6 @@
         not logged in
     <a href="/login">  [ login ]   </a>
     {% endif %}
+    <a href="/">   [ home ]</a>
 </footer>
 </html>

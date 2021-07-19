@@ -1,6 +1,6 @@
 from functools import wraps
 
-from flask import Flask, session, redirect, render_template, request
+from flask import Flask, session, redirect, render_template, request, flash
 from flask_sqlalchemy import SQLAlchemy
 
 
@@ -24,14 +24,15 @@ class Transaction(db.Model):
         return f'Transaction {self.id}: {self.ccy} {self.amount} from {self.sender}'
 
 
-def login_required(view):
-    @wraps(view)
-    def wrapper(*args, **kwargs):
+def login_required(page):
+    """decorator for page functions to redirect unlogged user to login page"""
+    @wraps(page)
+    def wrap(*args, **kwargs):
         if 'user' in session:
-            return view(*args, **kwargs)
+            return page(*args, **kwargs)
         else:
             return redirect('/login')
-    return wrapper
+    return wrap
 
 
 @app.route('/')
@@ -52,8 +53,13 @@ def transactions_page():
 def details_page(id):
     transaction = Transaction.query.get_or_404(id)
     if request.method == 'POST':
-        transaction.notes = request.form['note']
-        db.session.commit()
+        try:
+            transaction.notes = request.form['note']
+            db.session.commit()
+            flash('notes updated')
+        except Exception as e:
+            db.session.rollback()
+            flash(f'update failed: {e}', 'error')
     return render_template("details.html", transaction=transaction)
 
 
@@ -62,6 +68,7 @@ def login_page():
     if request.method == 'POST':
         user = request.form['login']
         session['user'] = user
+        flash('login successful')
         return redirect('/')
     return render_template('login.html')
 
@@ -70,6 +77,7 @@ def login_page():
 @login_required
 def logout_page():
     session.pop('user', None)
+    flash('logout successful')
     return redirect('/')
 
 
