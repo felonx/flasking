@@ -18,12 +18,12 @@ ccys = list(set(ccys))
 def transaction_generator(n=10):
 
     for _ in range(n):
-        modified = _random_date()
+        date = _random_date()
         sender, receiver = random.sample(names, 2)
         amount = round(random.uniform(0, 1000000), 2)
         ccy = random.choice(ccys)
 
-        yield Transaction(modified=modified, sender=sender, receiver=receiver, amount=amount, ccy=ccy)
+        yield Transaction(date=date, sender=sender, receiver=receiver, amount=amount, ccy=ccy)
 
 
 def _random_date() -> datetime:

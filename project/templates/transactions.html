@@ -12,16 +12,16 @@ Transactions
     {% else %}
     <table>
         <tr>
-            <th>Id</th>
-            <th>Modified</th>
-            <th>Sender</th>
-            <th>Amount</th>
-            <th>Ccy</th>
+            <th>id</th>
+            <th>date</th>
+            <th>sender</th>
+            <th>amount</th>
+            <th>ccy</th>
         </tr>
         {% for transaction in transactions %}
         <tr>
             <td>{{ transaction.id }}</td>
-            <td>{{ transaction.modified }}</td>
+            <td>{{ transaction.date }}</td>
             <td>{{ transaction.sender }}</td>
             <td>{{ transaction.amount }}</td>
             <td>{{ transaction.ccy }}</td>
