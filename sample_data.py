@@ -1,16 +1,22 @@
+"""quick script to generate some transactions data"""
+
+
 import random
 from datetime import datetime, timedelta
-from collections import namedtuple
 
+from project.app import db
+from project.app import Transaction
 
-names = ['John Smith', 'Mark Kowalski', 'Abraham Lincoln', 'Ronaldo']
+names = ['John Smith', 'Mark Kowalski', 'Abraham Lincoln', 'Ronaldo', 'Romario', 'Bebeto']
 ccys = [x.upper() for x in ['usd', 'eur', 'gbp', 'pln', 'jpy', 'cad']]
 
+# drop duplicates
+names = list(set(names))
+ccys = list(set(ccys))
 
-Transaction = namedtuple('transaction', 'modified sender receiver amount ccy')
 
+def transaction_generator(n=10):
 
-def _transaction_generator(n=10):
     for _ in range(n):
         modified = _random_date()
         sender, receiver = random.sample(names, 2)
@@ -28,14 +34,11 @@ def _random_date() -> datetime:
     return start + timedelta(seconds=random.randint(0, total_seconds))
 
 
-def generate_transactions(n=10):
-    trans_generator = _transaction_generator(n)
-    return [transaction for transaction in trans_generator]
-
-
 if __name__ == '__main__':
 
-    tg = _transaction_generator()
+    db.drop_all()
+    db.create_all()
 
-    for x in tg:
-        print(x)
+    for transaction in transaction_generator(20):
+        db.session.add(transaction)
+        db.session.commit()

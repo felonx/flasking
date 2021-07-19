@@ -1,1 +1,34 @@
 {% extends "base.html" %}
+
+{% block title %}
+Transactions
+{% endblock %}
+
+{% block body %}
+<div class="content">
+    <h1>Transactions summary</h1>
+    {% if transactions|length < 1 %}
+    <h4>There are no transactions!</h4>
+    {% else %}
+    <table>
+        <tr>
+            <th>Id</th>
+            <th>Modified</th>
+            <th>Sender</th>
+            <th>Amount</th>
+            <th>Ccy</th>
+        </tr>
+        {% for transaction in transactions %}
+        <tr>
+            <td>{{ transaction.id }}</td>
+            <td>{{ transaction.modified }}</td>
+            <td>{{ transaction.sender }}</td>
+            <td>{{ transaction.amount }}</td>
+            <td>{{ transaction.ccy }}</td>
+            <td><a href="/transactions/{{ transaction.id }}">Details</a></td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% endif %}
+</div>
+{% endblock %}

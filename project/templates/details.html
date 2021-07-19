@@ -1,1 +1,42 @@
 {% extends "base.html" %}
+
+
+{% block title %}
+Transaction Details
+{% endblock %}
+
+
+{% block body %}
+<div class="content">
+    <h1>Transaction {{ transaction.id }}details</h1>
+    <table>
+
+        <tr>
+            <td>id</td>
+            <td>{{ transaction.id }}</td>
+        </tr>
+        <tr>
+            <td>modified</td>
+            <td>{{ transaction.modified }}</td>
+        </tr>
+        <tr>
+            <td>sender</td>
+            <td>{{ transaction.sender }}</td>
+        </tr>
+        <tr>
+            <td>receiver</td>
+            <td>{{ transaction.receiver }}</td>
+        </tr>
+        <tr>
+            <td>amount</td>
+            <td>{{ transaction.amount }}</td>
+        </tr>
+        <tr>
+            <td>ccy</td>
+            <td>{{ transaction.ccy }}</td>
+        </tr>
+
+    </table>
+
+</div>
+{% endblock %}
