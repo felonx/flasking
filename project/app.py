@@ -1,7 +1,8 @@
+from functools import wraps
+
 from flask import Flask, session, redirect, render_template, request
 from flask_sqlalchemy import SQLAlchemy
 
-from functools import wraps
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = r'sqlite:///test.db'
@@ -17,6 +18,7 @@ class Transaction(db.Model):
     modified = db.Column(db.DateTime, nullable=False)
     amount = db.Column(db.Float, nullable=False)
     ccy = db.Column(db.String(3), nullable=False)
+    notes = db.Column(db.String(200), default='')
 
     def __repr__(self):
         return f'Transaction {self.id}: {self.ccy} {self.amount} from {self.sender}'
@@ -38,15 +40,6 @@ def index():
     return redirect('/transactions')
 
 
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    if request.method == 'POST':
-        user = request.form['login']
-        session['user'] = user
-        return redirect('/')
-    return render_template('login.html')
-
-
 @app.route('/transactions')
 @login_required
 def transactions_page():
@@ -54,11 +47,23 @@ def transactions_page():
     return render_template("transactions.html", transactions=transactions)
 
 
-@app.route('/transactions/<int:id>')
+@app.route('/transactions/<int:id>', methods=['GET', 'POST'])
 @login_required
 def details_page(id):
     transaction = Transaction.query.get_or_404(id)
+    if request.method == 'POST':
+        transaction.notes = request.form['note']
+        db.session.commit()
     return render_template("details.html", transaction=transaction)
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login_page():
+    if request.method == 'POST':
+        user = request.form['login']
+        session['user'] = user
+        return redirect('/')
+    return render_template('login.html')
 
 
 @app.route('/logout')

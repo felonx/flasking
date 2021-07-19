@@ -9,12 +9,13 @@
     {% block body %}{% endblock %}
 </body>
 <footer>
+    <br><br><br><br><br>
     {% if session['user'] %}
         logged in as {{ session['user'] }}
-        <a href="/logout">logout</a>
+        <a href="/logout">   [ logout ]    </a>
     {% else %}
         not logged in
-    <a href="/login">login</a>
+    <a href="/login">  [ login ]   </a>
     {% endif %}
 </footer>
 </html>

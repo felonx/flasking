@@ -8,7 +8,7 @@ from project.app import db
 from project.app import Transaction
 
 names = ['John Smith', 'Mark Kowalski', 'Abraham Lincoln', 'Ronaldo', 'Romario', 'Bebeto']
-ccys = [x.upper() for x in ['usd', 'eur', 'gbp', 'pln', 'jpy', 'cad']]
+ccys = [x.upper() for x in ['usd', 'eur', 'gbp', 'pln', 'jpy', 'cad', 'aud', 'nzd', 'krw', 'sek', 'hkd']]
 
 # drop duplicates
 names = list(set(names))

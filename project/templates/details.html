@@ -35,6 +35,12 @@ Transaction Details
             <td>ccy</td>
             <td>{{ transaction.ccy }}</td>
         </tr>
+        <tr>
+            <td>notes</td>
+            <td><form action="/transactions/{{ transaction.id }}" method="POST">
+                <input type="text" name="note" value="{{ transaction.notes }}">
+                <input type="submit" value="Edit"> </form></td>
+        </tr>
 
     </table>
 
