@@ -8,4 +8,13 @@
 <body>
     {% block body %}{% endblock %}
 </body>
+<footer>
+    {% if session['user'] %}
+        logged in as {{ session['user'] }}
+        <a href="/logout">logout</a>
+    {% else %}
+        not logged in
+    <a href="/login">login</a>
+    {% endif %}
+</footer>
 </html>
