@@ -9,6 +9,7 @@ Transactions
     <h1>Transactions summary</h1>
     {% if transactions|length < 1 %}
     <h4>There are no transactions!</h4>
+    <form action="/load" method="POST"><input type="submit" name="load" value="click to load some sample data"></form>
     {% else %}
     <table>
         <tr>

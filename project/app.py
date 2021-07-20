@@ -5,8 +5,10 @@ from flask_sqlalchemy import SQLAlchemy
 
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = r'sqlite:///test.db'
-app.secret_key = 'sdfh2309rsac'   # needed to use session
+app.config['SQLALCHEMY_DATABASE_URI'] = r'sqlite:///transactions.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.secret_key = 'sdfh2309rsac'
+
 db = SQLAlchemy(app)
 
 
@@ -36,11 +38,6 @@ def login_required(page):
 
 
 @app.route('/')
-@login_required
-def index():
-    return redirect('/transactions')
-
-
 @app.route('/transactions')
 @login_required
 def transactions_page():
@@ -81,5 +78,19 @@ def logout_page():
     return redirect('/')
 
 
+@app.route('/load')
+@login_required
+def load_data():
+    try:
+        # importing here to avoid circular import in top of module. will need refactoring of models/init to make it nice
+        from project.sample_data import populate_data_to_db
+        populate_data_to_db(db, 20)
+        flash('20 records of data added')
+    except Exception as e:
+        flash(f'there was an issue uploading data: {e}', 'error')
+    return redirect('/')
+
+
 if __name__ == '__main__':
+    db.create_all()
     app.run(debug=True)

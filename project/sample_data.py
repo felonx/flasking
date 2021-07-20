@@ -4,7 +4,6 @@
 import random
 from datetime import datetime, timedelta
 
-from project.app import db
 from project.app import Transaction
 
 names = ['John Smith', 'Mark Kowalski', 'Abraham Lincoln', 'Ronaldo', 'Romario', 'Bebeto']
@@ -34,11 +33,24 @@ def _random_date() -> datetime:
     return start + timedelta(seconds=random.randint(0, total_seconds))
 
 
-if __name__ == '__main__':
+def populate_data_to_db(db, n=10, drop=True):
 
-    db.drop_all()
+    if drop:
+        db.session.close()
+        db.drop_all()
+
     db.create_all()
 
-    for transaction in transaction_generator(20):
+    for transaction in transaction_generator(n):
         db.session.add(transaction)
+
+    try:
         db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        raise
+
+
+if __name__ == '__main__':
+    from project.app import db
+    populate_data_to_db(db, 20)
