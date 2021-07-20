@@ -26,6 +26,11 @@ class Transaction(db.Model):
         return f'Transaction {self.id}: {self.ccy} {self.amount} from {self.sender}'
 
 
+# just leaving db initialization here for now until app scales up - for db to always load up on starting the server
+# ultimately this can be moved out to eg init_db cli command
+db.create_all()
+
+
 def login_required(page):
     """decorator for page functions to redirect unlogged user to login page"""
     @wraps(page)
@@ -92,5 +97,4 @@ def load_data():
 
 
 if __name__ == '__main__':
-    db.create_all()
     app.run(debug=True)
